@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <title>ancewer' Blog - VS2015</title>
+        <title>DCMTK in VS2015</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="/theme/css/main.css" type="text/css" />
         <link href="/" type="application/atom+xml" rel="alternate" title="ancewer' Blog ATOM Feed" />
@@ -30,9 +30,11 @@
                 </ul></nav>
         </header><!-- /#banner -->
         
-        
-        <aside id="featured" class="body"><article>
-                <h1 class="entry-title"><a href="/DCMTK in VS2015.html">DCMTK in VS2015</a></h1> 
+<section id="content" class="body">    
+<article>
+        <header> <h1 class="entry-title"><a href="DCMTK in VS20151.html"
+        rel="bookmark" title="Permalink to DCMTK in VS2015">DCMTK in VS2015</a></h1>   </header>
+        <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2017-05-22T22:20:00+08:00">
                 2017-05-22
@@ -43,7 +45,7 @@
         </address>
 <p>In <a href="/category/misc.html">misc</a>. </p>
 <p>tags: <a href="/tag/dcmtk.html">DCMTK</a><a href="/tag/vs2015.html">VS2015</a></p></p>
-</footer><!-- /.post-info -->                <p>&emsp;本文主要介绍VS中如何配置和使用DCMTK库，也会提及qt，没有详细介绍VS和cmake等工具的安装，因为这都不会的话，也没必要再学了。本人用的电脑是x86_64,编译只讲32位的，64位同理。</p>
+</footer><!-- /.post-info -->        <p>&emsp;本文主要介绍VS中如何配置和使用DCMTK库，也会提及qt，没有详细介绍VS和cmake等工具的安装，因为这都不会的话，也没必要再学了。本人用的电脑是x86_64,编译只讲32位的，64位同理。</p>
 <p>&emsp;DCMTK是一个功能强大针对医学图像处理、通讯的开源库，主要面向C++语言。本人最近在做一个项目，项目需求是跨平台、C++编程，所以就选用了DCMTK库作为工具，由于编程基础薄弱，在该库的配置过程中遇到很多障碍，这里把其中的经验总结下来，供需要的人参考。大神绕路，不喜也勿喷。</p>
 <h1>1 VS2015的安装</h1>
 <p>&emsp;下载VS2015，我之前用的是社区版，后来用的企业版，对DCMTK库都没问题，这里是<a href="http://msdn.itellyou.cn/">下载网站</a>，请自行安装。</p>
@@ -161,36 +163,10 @@ MTd静态链接库debug版本
 <h2>2 Linux下使用</h2>
 <p>&emsp;Linux下库的编译也用cmake，操作方法跟Windows下相同。如果你在Windows下折腾熟了，Linux下也是一样的，在这里我也懒得多说了，在linux下qt中的配置跟Windows下qt的配置类似，去掉几个windows下特有的lib即可，我自己试过，没啥问题，这里贴个我在linux下的pro文件的配置；
 <div align='center'><img src="images/2017-05-22-20-36-08.png" width="300" height="400"/></div></p>
-                </article>
-                </aside><!-- /#featured -->
-            <section id="content" class="body">
-                <h1>Other articles</h1>
-                <hr />
-                    <ol id="posts-list" class="hfeed">
-        
- 
-        <li><article class="hentry">    
-                <header>
-                        <h1><a href="/DCMTK in VS20151.html" rel="bookmark" title="Permalink to DCMTK in VS2015">DCMTK in VS2015</a></h1>
-                </header>
-                
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-05-22T22:20:00+08:00">
-                2017-05-22
-        </abbr>
+        </div><!-- /.entry-content -->
 
-        <address class="vcard author">
-                By <a class="url fn" href="/author/liu-chunbo.html">Liu Chunbo</a>
-        </address>
-<p>In <a href="/category/misc.html">misc</a>. </p>
-<p>tags: <a href="/tag/dcmtk.html">DCMTK</a><a href="/tag/vs2015.html">VS2015</a></p></p>
-</footer><!-- /.post-info -->                <p>dcmtkinvs20151</p>
-                <a class="readmore" href="/DCMTK in VS20151.html">read more</a>
-                </div><!-- /.entry-content -->
-        </article></li>
-</ol><!-- /#posts-list -->
-</section><!-- /#content -->
+</article>
+</section>
         <section id="extras" class="body">
         </section><!-- /#extras -->
 
