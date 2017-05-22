@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>ancewer' blog - VS2015</title>
+
+    <link rel="stylesheet" href="/theme/css/normalize.css" />
+    <link rel="stylesheet" href="/theme/css/foundation.min.css" />
+    <link rel="stylesheet" href="/theme/css/style.css" />
+    <link rel="stylesheet" href="/theme/css/pygments.css" />	
+    <script src="/theme/js/modernizr.js"></script>
+</head>
+
+<body>
+
+<!-- Nav Bar -->
+<nav>
+<div class="top-bar">
+<div class="row">
+    <div class="large-9 large-centered columns">
+	    <h1><a href="">ancewer' blog</a></h1>
+    </div>
+</div>
+</div>
+
+<!-- Show menu items and pages -->
+<div class="row">
+<div class="large-9 columns">
+    <ul class="button-group navigation">
+
+    </ul>
+</div>
+</div>
+</nav>
+<!-- End Nav -->
+
+
+<!-- Main Page Content and Sidebar -->
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div class="large-9 columns">
+        
+        
+
+            <article>
+                <a href="/DCMTK in VS2015.html"><h3 class="article-title">DCMTK in VS2015</h3></a>
+<h6 class="subheader" title="2017-05-22T22:20:00+08:00">2017-05-22
+</h6>
+
+
+<p>&emsp;本文主要介绍VS中如何配置和使用DCMTK库，也会提及qt，没有详细介绍VS和cmake等工具的安装，因为这都不会的话，也没必要再学了。本人用的电脑是x86_64,编译只讲32位的，64位同理。</p>
+<p>&emsp;DCMTK是一个功能强大针对医学图像处理、通讯的开源库，主要面向C++语言。本人最近在做一个项目，项目需求是跨平台、C++编程，所以就选用了DCMTK库作为工具，由于编程基础薄弱，在该库的配置过程中遇到很多障碍，这里把其中的经验总结下来，供需要的人参考。大神绕路，不喜也勿喷。</p>
+<h1>1 VS2015的安装</h1>
+<p>&emsp;下载VS2015，我之前用的是社区版，后来用的企业版，对DCMTK库都没问题，这里是<a href="http://msdn.itellyou.cn/">下载网站</a>，请自行安装。</p>
+<h1>2 下载DCMTK库</h1>
+<p>&emsp;下载DCMTK3.6.1版本源代码并解压，<a href="http://dicom.offis.de/download/dcmtk/snapshot/">下载地址</a>或<a href="ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/snapshot/">下载地址</a></p>
+<h1>3 安装cmake并编译DCMTK库</h1>
+<p>&emsp;下载cmake3.8.0并安装，<a href="https://cmake.org/">下载地址</a>，打开cmake gui，如图所示：<div align='center'><img src="images/2017-05-22-19-35-18.png" width="500" height="500"/></div> 
+<em> 在1中输入解压的位置，2中为自己新建的文件夹；
+</em> 点击configure（耗时比较久，第一次使用时候会弹出选择工具，选择VS 14 2015即可），然后出现如图所示红色状态；
+<em> 在CMAKE_INSTALL_PREFIX中修改安装位置（建议不在C盘，因为在C盘的话有时候需要管理员权限，比较麻烦）；
+</em> 在CMAKE_CXX_FLAGS_...中修改库类型，MD-动态链接库releae版本，MDd动态链接库debug版本，MT静态链接库release版本，MTd静态链接库debug版本，这里暂不做修改；（默认动态链接库，由于我的项目用了qt做界面，而直接安装的qt默认是动态库，为了匹配，我就没做修改）
+<em> 如果后面想安装release版本的话，注意把CMAKE_OVERWRITE_WIN32_COMPILER的选中取消（在stack overflow看到的，亲测有效）；
+</em> 点击generate生成项目，然后点击open即可打开VS2015并导入项目</p>
+<h1>4 使用VS2015构建并安装DCMTK库</h1>
+<p>&emsp;上一步只是对DCMTK库编译了下，并没有安装，如图所示，在VS2015菜单栏中点击 生成-&gt;批生成，选中ALL_BUILD Debug Win32然后点击生成，完了选中INSTALL中的对应选项，点击生成，生成完毕没报错（warning不用管）就可以用了，如果有报错，重复前面步骤检查错误。
+* 如果成功的话在cmake gui界面CMAKE_INSTALL_PREFIX设置的目录下会有include/lib/bin等目录，大小几百M，release版本和debug大小不同；
+<div align='center'><img src="images/2017-05-22-17-52-48.png" width="700" height="500"/></div> </p>
+<h1>5 建立VS项目测试</h1>
+<p>&emsp;建立一个空C++项目，然后设置相关项，注意debug模式和release模式，两个的设置方法一样，但用哪个设置哪个，两个都用就都设置（前提是你的两种DCMTK库你都成功安装了）：
+<em> 右键项目-&gt;属性-&gt;C/C++-&gt;代码生成-&gt;运行库MDd </em>（因为默认的debug模式，我们就先按照这个来）<em>
+</em> 右键项目-&gt;属性-&gt;C/C++-&gt;附加包含目录，加入前面库的安装目录下的include目录，我的是，<em>D:\DCMTK\MDd\include</em>
+<em> 右键项目-&gt;属性-&gt;链接器&gt;附加库目录，加入前面库的安装目录下的lib目录，</em>D:\DCMTK\MDd\lib<em>
+</em> 右键项目-&gt;属性-&gt;链接器&gt;依赖项，加入以下内容：</p>
+<div class="highlight"><pre><span></span>    kernel32.lib
+    user32.lib
+    gdi32.lib
+    winspool.lib
+    shell32.lib
+    ole32.lib
+    oleaut32.lib
+    uuid.lib
+    comdlg32.lib
+    advapi32.lib
+    dcmdata.lib
+    oflog.lib
+    ofstd.lib
+    ws2_32.lib
+    netapi32.lib
+    wsock32.lib
+    dcmimgle.lib
+    dcmimage.lib
+    dcmrt.lib
+</pre></div>
+
+
+<p>&emsp;输入代码测试，在主文件中写如下代码：  </p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;dcmtk/config/osconfig.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;dcmtk/dcmdata/dctk.h&quot;</span><span class="cp"></span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kr">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">DcmFileFormat</span> <span class="n">fileformat</span><span class="p">;</span>
+    <span class="n">OFFilename</span><span class="o">=</span><span class="s">&quot;test.dcm&quot;</span><span class="p">;</span><span class="c1">//这里改为你的dcm文件</span>
+    <span class="n">OFCondition</span> <span class="n">status</span> <span class="o">=</span> <span class="n">fileformat</span><span class="p">.</span><span class="n">loadFile</span><span class="p">(</span><span class="n">OFFilename</span><span class="p">);</span>
+    <span class="n">DcmDataset</span> <span class="o">*</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">fileformat</span><span class="p">.</span><span class="n">getDataset</span><span class="p">();</span>
+    <span class="n">OFString</span> <span class="n">PatientName</span><span class="p">;</span>
+    <span class="n">dataset</span><span class="o">-&gt;</span><span class="n">findAndGetOFString</span><span class="p">(</span><span class="n">DCM_PatientName</span><span class="p">,</span> <span class="n">PatientName</span><span class="p">);</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">PatientName</span><span class="p">;</span>
+
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>&emsp;如果这里运行没问题的话，说明库安装成功（当然也可能存在小瑕疵，但整体没错，即便有问题，多折腾几次就好了，我都折腾了十七八回了，人生苦短，贵在折腾啊）；</p>
+<p>折腾时候可能遇到的问题： 
+<em> 1 一大堆的link错误，一般是链接器中lib文件的顺序或者缺少某lib文件，或者库根本没编译好；
+</em> 2 *<em>log错误，就是traclog或者什么，错误文件名中含log，找到该文件，把报错的几行给注释掉即可；
+</em> 3 MTd与MDd什么不符的，就是用的库类型和设置的库类型不符，看文章最后库类型的介绍，一定要一致才能用；</p>
+<h1>6 QT中测试</h1>
+<p>&emsp;你可能疑惑，bb了这么久，说好的qt呢，其实库编译好qt就是能用的，在qt下建立个项目，贴上上面代码，在pro文件里添加如下代码：</p>
+<div class="highlight"><pre><span></span>DCMTK=$$quote(&quot;D:/DCMTK/MDd&quot;)
+DCMTK_INCLUDE=$$DCMTK&quot;\include&quot;
+INCLUDEPATH +=  $$DCMTK_INCLUDE
+LIBS+= -L$$quote(&quot;D:/DCMTK/MDd/lib/&quot;)
+LIBS += -lkernel32 \
+-luser32 \
+-lgdi32 \
+-lwinspool \
+-lshell32 \
+-lole32 \
+-loleaut32 \
+-luuid \
+-lcomdlg32 \
+-ladvapi32 \
+-ldcmdata \
+-loflog \
+-lofstd \
+-lws2_32 \
+-lnetapi32 \
+-lwsock32 \
+-ldcmimgle \
+-ldcmimage \
+-ldcmrt
+</pre></div>
+
+
+<p>&emsp;看看是不是可以用了呢，如果不行，继续慢慢折腾吧！</p>
+<hr>
+<h1><strong>注意事项</strong></h1>
+<h2>1 这里再重新介绍下动态链接库和静态链接库：</h2>
+<div class="highlight"><pre><span></span>MD动态链接库release版本
+MT静态链接库release版本
+MDd动态链接库debug版本
+MTd静态链接库debug版本
+</pre></div>
+
+
+<ul>
+<li>动态链接库：顾名思义动态地调用库链接，程序编译生成的exe文件比较小，执行的时候调用所用到的库，如果换个环境这个exe文件就执行不了了，也就是我们常见的程序缺少...，或者直接内存什么鬼的出问题直接挂掉。有点是改动库的话程序不用重新编译，exe文件比较小，缺点是移植到别的电脑的话需要把所依赖的库一起整理打包。</li>
+<li>静态链接库：与动态链接库相对，编译时候编译器把库中用到的的函数编译一起到可执行程序，程序移植方便，但是文件较大，如果修改需要重新编译。</li>
+</ul>
+<h2>2 Linux下使用</h2>
+<p>&emsp;Linux下库的编译也用cmake，操作方法跟Windows下相同。如果你在Windows下折腾熟了，Linux下也是一样的，在这里我也懒得多说了，在linux下qt中的配置跟Windows下qt的配置类似，去掉几个windows下特有的lib即可，我自己试过，没啥问题，这里贴个我在linux下的pro文件的配置；
+<div align='center'><img src="images/2017-05-22-20-36-08.png" width="300" height="400"/></div></p><p class="subheader">Category: <a href="/category/misc.html">misc</a>
+
+    Tagged: 
+    <a href="/tag/dcmtk.html">DCMTK </a>
+    <a href="/tag/vs2015.html">VS2015 </a>
+</p>
+
+
+
+            </article>
+
+<div class="pagination-centered">
+<h6 class="subheader">Page 1 of 1</h6>
+
+<p>
+
+</p>
+</div>
+
+
+
+            <!-- /#posts-list -->
+
+    </div>
+    <!-- End Main Content -->
+
+    <!-- Sidebar -->
+    <aside class="large-3 columns">
+        <h5 class="sidebar-title">Site</h5>
+        <ul class="side-nav">
+            <li><a href="/archives.html">Archives</a>
+            <li><a href="/tags.html">Tags</a>
+        </ul>
+
+		
+        <h5 class="sidebar-title">Categories</h5>
+        <ul class="side-nav">
+            <li><a href="/category/misc.html">misc</a></li>
+   
+        </ul>
+
+        <h5 class="sidebar-title">Links</h5>
+        <ul class="side-nav">
+            <li><a href="http://www.cqu.edu.cn/">重庆大学</a></li>
+            <li><a href="http://www.ustc.edu.cn/">中国科学技术大学</a></li>
+            <li><a href="http://www.snst.ustc.edu.cn/">中国科大核科学技术学院</a></li>
+            <li><a href="http://crmp.ustc.edu.cn/">中国科大放射医学物理中心</a></li>
+        </ul>
+		
+
+    </aside> <!-- End Sidebar -->
+
+</div> <!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+              <!--                  <p>ancewer' blog by Liu Chunbo</p> -->
+            </div>
+            </div>
+    </div>
+</footer>
+</body>
+</html>
